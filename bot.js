@@ -10,6 +10,7 @@ const intents = new Intents();
 // Our custom client object
 const client = new Client(config);
 
+// Load events and commands
 client.loadEvents();
 client.loadCommands();
 console.log(__dirname);

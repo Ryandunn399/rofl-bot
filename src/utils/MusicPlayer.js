@@ -22,8 +22,7 @@ class MusicPlayer {
         }
 
         if(this.queue.length == 0) {
-            console.error('There isn\'t any music currently in the queue!');
-            return;
+            return message.channel.send('The queue is finished!');
         }
 
         // get the latest url from the queue.
@@ -34,7 +33,7 @@ class MusicPlayer {
         const dispatcher = connection.play(ytdl(url, {filter:'audioonly'}))
             .on('finish', () => {
                 this.queue.shift();
-                this.play(message.member.voice.channel);
+                this.play(message);
             })
             .on('error', error => console.error(error));
 
@@ -42,8 +41,13 @@ class MusicPlayer {
         this.playing = true;
     }
 
-    addMedia(message, url) {
-        console.log(url);
+    /**
+     * Will attempt to add the media url link if ytdl is able to validate it.
+     * @param {*} message 
+     * @param {*} url 
+     * @returns 
+     */
+    async addMedia(message, url) {
         if (!url) {
             console.log('There was no url to parse!');
             return;
@@ -55,12 +59,14 @@ class MusicPlayer {
         }
 
         this.queue.push(url);
+        const songInfo = (await ytdl.getInfo(url)).videoDetails.title;
+        message.channel.send(`You have queued ${songInfo}!`);
     }
 
-    hasQueue() {
-        return this.queue.length > 0;
-    }
-
+    /**
+     * Will return true if the media player is currently playing something, otherwise false.
+     * @returns 
+     */
     isPlaying() {
         return this.playing;
     }

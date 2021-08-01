@@ -3,6 +3,9 @@ const ytdl = require('ytdl-core');
 
 const songUrl = 'https://www.youtube.com/watch?v=kTJczUoc26U';
 
+/**
+ * Test command established to write and test code.
+ */
 module.exports = class TestCommand extends Command {
     
     constructor(client) {
