@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const {MessageEmbed} = require('discord.js');
 
 /**
  * This module will handle the playing and queing of songs for our media player.
@@ -29,7 +30,7 @@ class MusicPlayer {
 
         // get the latest url from the queue.
         const url = this.queue[0];
-        const songInfo = (await ytdl.getInfo(url)).videoDetails.title;
+        const songInfo = (await ytdl.getInfo(url));//.videoDetails.title;
 
         this.playing = true;
 
@@ -46,7 +47,18 @@ class MusicPlayer {
             })
             .on('error', error => console.error(error));
 
-        message.channel.send(`Current playing ${songInfo}`);
+        const time = this.convertSeconds(songInfo.videoDetails.lengthSeconds);
+        //message.channel.send(`Current playing ${songInfo}`);
+        const embed = new MessageEmbed()
+            .setAuthor('Now Playing')
+            .setURL(url)
+            .setTitle(songInfo.videoDetails.title)
+            .setThumbnail(`https://img.youtube.com/vi/${songInfo.videoDetails.videoId}/maxresdefault.jpg`)
+            .setFooter(`Requested by ` + message.member);
+        message.channel.send(embed);
+
+        console.log(songInfo.videoDetails.videoId);
+        console.log(message.author.name);
     }
 
     /**
@@ -79,6 +91,13 @@ class MusicPlayer {
      */
     isPlaying() {
         return this.playing;
+    }
+
+    convertSeconds(value) {
+        var time = parseInt(value);
+        var minutes = Math.floor(time / 60);
+        var seconds = time - minutes * 60;
+        return (minutes.toString() + ":" + seconds.toString().padStart(2, '0'));
     }
 }
 
