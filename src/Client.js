@@ -52,7 +52,6 @@ class Client extends Discord.Client {
      */
     loadCommands() {
         readdirSync(commandDir).filter(f => !f.endsWith('.js')).forEach(dir => {
-            console.log(dir);
             const commands = readdirSync(resolve(__maindir, join(commandDir, dir))).filter(f => f.endsWith('js'));
             commands.forEach(f => {
                 const Command = require(resolve(__maindir, join(commandDir, dir, f)));
