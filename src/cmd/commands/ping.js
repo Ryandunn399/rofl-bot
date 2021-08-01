@@ -12,14 +12,22 @@ module.exports = class PingCommand extends Command {
      */
     constructor (client) {
         super(client, {
-            name: 'ping'
+            name: 'ping',
+            usage: '[num 1-2]'
         })
     }
 
-    async run (message) {
-        const embed = new MessageEmbed()
-            .setTitle('Pong!')
-            .setTimestamp();
+    async run (message, args) {
+        console.log(args.length);
+        if (args.length < 2)
+            return super.showUsage(message);
+        
+        const num = args[1];
+        if (num == 1)
+            return message.channel.send('Pong one!');
+
+        if (num == 2)
+            return message.channel.send('Pong two!');
 
         message.channel.send('Pong!');
     }

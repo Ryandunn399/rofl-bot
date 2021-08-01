@@ -19,6 +19,11 @@ class Command {
          * Name of the command.
          */
         this.name = options.name;
+
+        /**
+         * Usage of command.
+         */
+        this.usage = options.usage;
     }
 
     /**
@@ -26,6 +31,10 @@ class Command {
      */
     run() {
         throw new Error(`The command ${this.name} has no functionality!`);
+    }
+
+    showUsage(message) {
+        message.channel.send(`Usage: !${this.name} ${this.usage}`);
     }
 }
 

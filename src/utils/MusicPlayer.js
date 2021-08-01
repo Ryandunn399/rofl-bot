@@ -15,8 +15,8 @@ class MusicPlayer {
      * Function will make the bot play media from the top of our queue map.
      * @param {*} channel 
      */
-    async play(channel) {
-        if(!channel) {
+    async play(message) {
+        if(!message.member.voice.channel) {
             console.error('Bot attempted to join a channel that doesn\'t exist!');
             return;
         }
@@ -27,21 +27,23 @@ class MusicPlayer {
         }
 
         // get the latest url from the queue.
-        const url = queue[0];
+        const url = this.queue[0];
         const songInfo = (await ytdl.getInfo(url)).videoDetails.title;
 
-        channel.send(`Current playing ${songInfo}`);
-        const connection = await channel.join();
+        const connection = await message.member.voice.channel.join();
         const dispatcher = connection.play(ytdl(url, {filter:'audioonly'}))
             .on('finish', () => {
                 this.queue.shift();
-                this.play(channel);
+                this.play(message.member.voice.channel);
             })
             .on('error', error => console.error(error));
-        return dispatcher;
+
+        message.channel.send(`Current playing ${songInfo}`);
+        this.playing = true;
     }
 
-    addMedia(channel, url) {
+    addMedia(message, url) {
+        console.log(url);
         if (!url) {
             console.log('There was no url to parse!');
             return;
@@ -53,6 +55,14 @@ class MusicPlayer {
         }
 
         this.queue.push(url);
+    }
+
+    hasQueue() {
+        return this.queue.length > 0;
+    }
+
+    isPlaying() {
+        return this.playing;
     }
 }
 

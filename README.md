@@ -22,3 +22,11 @@ Before we can actually run rofl-bot, we need to setup a config file for local va
 
 # Documentation
 For more information regarding Discord's JavaScript library, visit the api [here](https://discord.js.org/#/docs/main/stable/general/welcome) or the intro guide [here](https://discordjs.guide/)
+
+# Troubleshooting
+- Error on media player (ffmpeg not found)
+```
+npm install ffmpeg-static
+npm install @discordjs/opus
+npm install ytdl-core
+```

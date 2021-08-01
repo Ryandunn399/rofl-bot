@@ -7,12 +7,12 @@ module.exports = async (client, message) => {
 
     // Check to see if the message is a command.
     if (message.content.charAt(0) == '!') {
-        const cmdArgs = message.content.trim().split(' ');
-        const cmd = cmdArgs[0].substring(1);
+        const args = message.content.trim().split(' ');
+        const cmd = args[0].substring(1);
         
         if (client.commands.has(cmd)) {
             const command = client.commands.get(cmd);
-            command.run(message);
+            command.run(message, args);
         }
     }
 }
