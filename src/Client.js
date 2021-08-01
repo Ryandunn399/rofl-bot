@@ -1,12 +1,12 @@
 const Discord = require('discord.js');
 const MusicPlayer = require('./utils/MusicPlayer');
 const {readdirSync} = require('fs');
-const {resolve} = require('path');
+const {join, resolve} = require('path');
 
 // Function to define event class to import and load here
 const reqEvent = (event) => require(`./events/${event}`);
 
-const commandDir = './src/cmd/commands';
+const commandDir = './src/cmd';
 
 /**
  * rofl-bot custom client
@@ -51,11 +51,14 @@ class Client extends Discord.Client {
      * cmd/commands directory.
      */
     loadCommands() {
-        const commands = readdirSync(resolve(commandDir)).filter(f => f.endsWith('js'));
-        commands.forEach(f => {
-            const Command = require(resolve(`${commandDir}/${f}`));
-            const command = new Command(this);
-            this.commands.set(command.name, command);
+        readdirSync(commandDir).filter(f => !f.endsWith('.js')).forEach(dir => {
+            console.log(dir);
+            const commands = readdirSync(resolve(__maindir, join(commandDir, dir))).filter(f => f.endsWith('js'));
+            commands.forEach(f => {
+                const Command = require(resolve(__maindir, join(commandDir, dir, f)));
+                const command = new Command(this);
+                this.commands.set(command.name, command);
+            })
         })
     }
 }

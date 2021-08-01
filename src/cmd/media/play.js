@@ -20,7 +20,10 @@ module.exports = class PlayCommand extends Command {
         const mediaPlayer = this.client.media;
         mediaPlayer.addMedia(message, url);
 
-        if (!mediaPlayer.playing) 
+        if (!mediaPlayer.playing) {
             mediaPlayer.play(message);
+        } else {
+            console.log('The player is currently playing!');
+        }
     }
 }
