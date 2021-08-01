@@ -11,6 +11,8 @@ const intents = new Intents();
 const client = new Client(config);
 
 client.loadEvents();
+client.loadCommands();
+console.log(__dirname);
 
 // Initialize client functions
 client.login(client.token);
