@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const MusicPlayer = require('./utils/MusicPlayer');
 const {readdirSync} = require('fs');
 const {resolve} = require('path');
 
@@ -27,6 +28,8 @@ class Client extends Discord.Client {
          * A collection of bot commands.
          */
         this.commands = new Discord.Collection();
+
+        this.media = new MusicPlayer();
     }
 
 
