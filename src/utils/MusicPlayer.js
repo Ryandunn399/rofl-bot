@@ -29,7 +29,10 @@ class MusicPlayer {
         }
 
         // get the latest url from the queue.
-        const url = this.queue[0];
+        const url = this.queue[0].url;
+        const user = this.queue[0].user;
+        const avatar = this.queue[0].avatar;
+
         const songInfo = (await ytdl.getInfo(url));//.videoDetails.title;
 
         this.playing = true;
@@ -54,11 +57,8 @@ class MusicPlayer {
             .setURL(url)
             .setTitle(songInfo.videoDetails.title)
             .setThumbnail(`https://img.youtube.com/vi/${songInfo.videoDetails.videoId}/maxresdefault.jpg`)
-            .setFooter(`Requested by ` + message.member);
+            .setFooter(user, avatar);  
         message.channel.send(embed);
-
-        console.log(songInfo.videoDetails.videoId);
-        console.log(message.author.name);
     }
 
     /**
@@ -78,7 +78,7 @@ class MusicPlayer {
             return;
         }
 
-        this.queue.push(url);
+        this.queue.push(new SongRequest(url, message.member.displayName, message.author.displayAvatarURL({dynamic: true})));
         const songInfo = (await ytdl.getInfo(url)).videoDetails.title;
         
         if (this.isPlaying)
@@ -93,11 +93,28 @@ class MusicPlayer {
         return this.playing;
     }
 
+    /**
+     * Convert time seconds (int) to minutes:seconds format (str)
+     * @param {*} value 
+     * @returns 
+     */
     convertSeconds(value) {
         var time = parseInt(value);
         var minutes = Math.floor(time / 60);
         var seconds = time - minutes * 60;
         return (minutes.toString() + ":" + seconds.toString().padStart(2, '0'));
+    }
+}
+
+/**
+ * Class to store which user sent a song request.
+ */
+class SongRequest {
+
+    constructor(url, user, avatar) {
+        this.url = url;
+        this.user = user;
+        this.avatar = avatar;
     }
 }
 
