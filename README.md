@@ -1,5 +1,5 @@
 # rofl-bot
-rofl-bot is an open-source discord bot written as a multi function discord bot to cover an array of uses including moderation, utility, and games
+rofl-bot is an open-source discord bot written as a multi function discord bot to cover an array of uses including moderation, utility, and games.  As of right now, however, the primary functionality is to serve as a way to stream YouTube audio after the latest streak of large Discord bots had such functionality removed.
 
 ## Installation
 
